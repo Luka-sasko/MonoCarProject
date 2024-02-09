@@ -1,0 +1,6 @@
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\bin\Debug\Mono5.Model.Common.dll
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\bin\Debug\Mono5.Model.Common.pdb
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\obj\Debug\Mono5.Model.Common.csproj.AssemblyReference.cache
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\obj\Debug\Mono5.Model.Common.csproj.CoreCompileInputs.cache
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\obj\Debug\Mono5.Model.Common.dll
+F:\Mono\Mono5.WebApi\Mono5.Model.Common\obj\Debug\Mono5.Model.Common.pdb
