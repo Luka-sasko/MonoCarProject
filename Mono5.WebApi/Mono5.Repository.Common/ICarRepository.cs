@@ -9,10 +9,10 @@ namespace Mono5.Repository.Common
 {
     public interface ICarRepository
     {
-        IEnumerable<Car> GetAllCars();
-        Car FindCarById(int id);
-        void DeleteCar(int id);
-        void UpdateCar(int id, CarUpdate updatedCar);
-        void AddCar(Car car);
+        Task<IEnumerable<Car>> GetAllCars();
+        Task <Car> FindCarById(int id);
+        Task DeleteCar(int id);
+        Task UpdateCar(int id, CarUpdate updatedCar);
+        Task AddCar(Car car);
     }
 }

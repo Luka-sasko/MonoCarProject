@@ -12,45 +12,46 @@ namespace Mono5.Service
     public class DriverService : IDriverService
     {
         private readonly IDriverRepository DriverRepository;
+
         public DriverService(IDriverRepository driverRepository)
         {
             DriverRepository = driverRepository;
         }
-        public void AddDriver(Driver driver)
+
+        public async Task AddDriver(Driver driver)
         {
             if (driver == null)
-                throw new ArgumentException("Failed!");
-            DriverRepository.AddDriver(driver);
+                throw new ArgumentException("Driver cannot be null");
+            await DriverRepository.AddDriver(driver);
         }
 
-        public void DeleteDriver(int id)
+        public async Task DeleteDriver(int id)
         {
-
-            var driver = DriverRepository.FindDriverById(id);
+            var driver = await DriverRepository.FindDriverById(id);
             if (driver == null)
-                throw new ArgumentException("Failed!");
-            DriverRepository.DeleteDriver(id);
+                throw new ArgumentException("Driver not found");
+            await DriverRepository.DeleteDriver(id);
         }
 
-        public IEnumerable<Driver> GetAllDrivers()
+        public async Task<IEnumerable<Driver>> GetAllDrivers()
         {
-            return DriverRepository.GetAllDrivers();
+            return await DriverRepository.GetAllDrivers();
         }
 
-        public Driver GetDriverById(int id)
+        public async Task<Driver> GetDriverById(int id)
         {
-            var driver = DriverRepository.FindDriverById(id);
+            var driver = await DriverRepository.FindDriverById(id);
             if (driver == null)
-                throw new ArgumentException("Failed!");
+                throw new ArgumentException("Driver not found");
             return driver;
         }
 
-        public void UpdateDriver(int id, DriverUpdate editedDriver)
+        public async Task UpdateDriver(int id, DriverUpdate editedDriver)
         {
-            var driver = DriverRepository.FindDriverById(id);
+            var driver = await DriverRepository.FindDriverById(id);
             if (driver == null)
-                throw new ArgumentException("Failed!");
-            DriverRepository.UpdateDriver(id, editedDriver);
+                throw new ArgumentException("Driver not found");
+            await DriverRepository.UpdateDriver(id, editedDriver);
         }
     }
 }

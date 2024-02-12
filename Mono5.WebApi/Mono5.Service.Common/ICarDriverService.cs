@@ -9,11 +9,11 @@ namespace Mono5.Service.Common
 {
     public interface ICarDriverService
     {
-        Driver FindDriverById(int id);
-        Car FindCarById(int id);
-        void DeleteCarDriver(int driverId, int carId);
-        void UpdateCarDriver(int carId, int driverId, int newDriverId);
-        void AddCarDriver(int carId, int driverId);
-        IEnumerable<Driver> GetAllCarsDrivers(int carId);
+        Task<Driver> FindDriverById(int id);
+        Task<Car> FindCarById(int id);
+        Task DeleteCarDriver(int driverId, int carId);
+        Task UpdateCarDriver(int carId, int driverId, int newDriverId);
+        Task AddCarDriver(int carId, int driverId);
+        Task<IEnumerable<Driver>> GetAllCarsDrivers(int carId);
     }
 }

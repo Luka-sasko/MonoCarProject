@@ -11,7 +11,6 @@ namespace Mono5.Service
 {
     public class CarService : ICarService
     {
-
         private readonly ICarRepository CarRepository;
 
         public CarService(ICarRepository carRepository)
@@ -19,41 +18,40 @@ namespace Mono5.Service
             CarRepository = carRepository;
         }
 
-
-        public void AddCar(Car car)
+        public async Task AddCar(Car car)
         {
             if (car == null)
-                throw new ArgumentException("Failed!");
-            CarRepository.AddCar(car);
+                throw new ArgumentException("Car cannot be null");
+            await CarRepository.AddCar(car);
         }
 
-        public void DeleteCar(int id)
+        public async Task DeleteCar(int id)
         {
-            var car = CarRepository.FindCarById(id);
+            var car = await CarRepository.FindCarById(id);
             if (car == null)
-                throw new ArgumentException("Failed!");
-            CarRepository.DeleteCar(id);
+                throw new ArgumentException("Car not found");
+            await CarRepository.DeleteCar(id);
         }
 
-        public IEnumerable<Car> GetAllCars()
+        public async Task<IEnumerable<Car>> GetAllCars()
         {
-            return CarRepository.GetAllCars();
+            return await CarRepository.GetAllCars();
         }
 
-        public Car GetCarById(int id)
+        public async Task<Car> GetCarById(int id)
         {
-            var car = CarRepository.FindCarById(id);
+            var car = await CarRepository.FindCarById(id);
             if (car == null)
-                throw new ArgumentException("Failed!");
+                throw new ArgumentException("Car not found");
             return car;
         }
 
-        public void UpdateCar(int id, CarUpdate editedCar)
+        public async Task UpdateCar(int id, CarUpdate editedCar)
         {
-            var car = CarRepository.FindCarById(id);
+            var car = await CarRepository.FindCarById(id);
             if (car == null)
-                throw new ArgumentException("Failed!");
-            CarRepository.UpdateCar(id, editedCar);
+                throw new ArgumentException("Car not found");
+            await CarRepository.UpdateCar(id, editedCar);
         }
     }
 }

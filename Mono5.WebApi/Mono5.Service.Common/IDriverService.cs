@@ -9,10 +9,10 @@ namespace Mono5.Service.Common
 {
     public interface IDriverService
     {
-        Driver GetDriverById(int id);
-        IEnumerable<Driver> GetAllDrivers();
-        void AddDriver(Driver driver);
-        void UpdateDriver(int id, DriverUpdate editedDriver);
-        void DeleteDriver(int id);
+        Task<Driver> GetDriverById(int id);
+        Task<IEnumerable<Driver>> GetAllDrivers();
+        Task AddDriver(Driver driver);
+        Task UpdateDriver(int id, DriverUpdate editedDriver);
+        Task DeleteDriver(int id);
     }
 }

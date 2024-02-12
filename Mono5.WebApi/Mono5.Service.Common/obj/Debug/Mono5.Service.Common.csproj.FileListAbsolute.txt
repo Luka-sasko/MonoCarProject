@@ -9,3 +9,14 @@ F:\Mono\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.csproj.
 F:\Mono\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.csproj.CopyComplete
 F:\Mono\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.dll
 F:\Mono\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Service.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Service.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Model.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Model.dll
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Model.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\bin\Debug\Mono5.Model.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.csproj.AssemblyReference.cache
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.csproj.CoreCompileInputs.cache
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.csproj.CopyComplete
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Service.Common\obj\Debug\Mono5.Service.Common.pdb

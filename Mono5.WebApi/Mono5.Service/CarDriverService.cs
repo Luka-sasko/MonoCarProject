@@ -1,11 +1,10 @@
 ﻿using Mono5.Model;
 using Mono5.Service.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mono5.Repository.Common;
+
 namespace Mono5.Service
 {
     public class CarDriverService : ICarDriverService
@@ -17,41 +16,46 @@ namespace Mono5.Service
             CarDriverRepository = repository;
         }
 
-        public Car FindCarById(int id)
+        public async Task<Car> FindCarById(int id)
         {
-            return CarDriverRepository.FindCarById(id);
+            return await CarDriverRepository.FindCarById(id);
         }
 
-        public Driver FindDriverById(int id)
+        public async Task<Driver> FindDriverById(int id)
         {
-            return CarDriverRepository.FindDriverById(id);
+            return await CarDriverRepository.FindDriverById(id);
         }
 
-        public IEnumerable<Driver> GetAllCarsDrivers(int carId)
+        public async Task<IEnumerable<Driver>> GetAllCarsDrivers(int carId)
         {
-            if (CarDriverRepository.FindCarById(carId) == null)
+            var car = await CarDriverRepository.FindCarById(carId);
+            if (car == null)
                 return Enumerable.Empty<Driver>();
-            return CarDriverRepository.GetAllCarsDrivers(carId);
+            return await CarDriverRepository.GetAllCarsDrivers(carId);
         }
 
-        public void AddCarDriver(int carId, int driverId)
+        public async Task AddCarDriver(int carId, int driverId)
         {
-            if (CarDriverRepository.FindCarById(carId) != null && CarDriverRepository.FindDriverById(driverId) != null)
-                CarDriverRepository.AddCarDriver(carId, driverId);
+            var car = await CarDriverRepository.FindCarById(carId);
+            var driver = await CarDriverRepository.FindDriverById(driverId);
+            if (car != null && driver != null)
+                await CarDriverRepository.AddCarDriver(carId, driverId);
         }
 
-        public void DeleteCarDriver(int driverId, int carId)
+        public async Task DeleteCarDriver(int driverId, int carId)
         {
-            if (CarDriverRepository.FindCarById(carId) != null && CarDriverRepository.FindDriverById(driverId) != null)
-                CarDriverRepository.DeleteCarDriver(driverId, carId);
+            var car = await CarDriverRepository.FindCarById(carId);
+            var driver = await CarDriverRepository.FindDriverById(driverId);
+            if (car != null && driver != null)
+                await CarDriverRepository.DeleteCarDriver(driverId, carId);
         }
 
-        public void UpdateCarDriver(int carId, int driverId, int newDriverId)
+        public async Task UpdateCarDriver(int carId, int driverId, int newDriverId)
         {
-            if (CarDriverRepository.FindCarById(carId) != null && CarDriverRepository.FindDriverById(driverId) != null)
-                CarDriverRepository.UpdateCarDriver(carId, driverId, newDriverId);
+            var car = await CarDriverRepository.FindCarById(carId);
+            var driver = await CarDriverRepository.FindDriverById(driverId);
+            if (car != null && driver != null)
+                await CarDriverRepository.UpdateCarDriver(carId, driverId, newDriverId);
         }
-
-       
     }
 }

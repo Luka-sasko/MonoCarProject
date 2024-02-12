@@ -1,82 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Mono5.Model;
+using Mono5.Service.Common;
 
 namespace Mono5.WebApi.Controllers
 {
-    using System.Net;
-    using System.Net.Http;
-    using System.Web.Http;
-    using global::Mono5.Model;
-    using global::Mono5.Service.Common;
-    
-
-    namespace Mono5.WebApi.Controllers
+    public class DriverController : ApiController
     {
-        public class DriverController : ApiController
+        private readonly IDriverService DriverService;
+
+        public DriverController(IDriverService driverService)
         {
-            private readonly IDriverService DriverService;
+            DriverService = driverService;
+        }
 
-            public DriverController(IDriverService driverService)
+        // GET api/driver/{id}
+        public async Task<HttpResponseMessage> Get(int id)
+        {
+            try
             {
-                DriverService = driverService;
-            }
-
-            // GET api/driver/{id}
-            public HttpResponseMessage Get(int id)
-            {
-                var driver = DriverService.GetDriverById(id);
+                var driver = await DriverService.GetDriverById(id);
                 if (driver == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Driver was not found!");
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, driver);
             }
-
-            // POST api/driver
-            public HttpResponseMessage Post([FromBody] Driver newDriver)
+            catch (Exception ex)
             {
-                try
-                {
-                    DriverService.AddDriver(newDriver);
-                    return Request.CreateResponse(HttpStatusCode.Created, newDriver);
-                }
-                catch (ArgumentException ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-                }
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
 
-            // PUT api/driver/{id}
-            public HttpResponseMessage Put(int id, [FromBody] DriverUpdate editedDriver)
+        // POST api/driver
+        public async Task<HttpResponseMessage> Post([FromBody] Driver newDriver)
+        {
+            try
             {
-                try
-                {
-                    DriverService.UpdateDriver(id, editedDriver);
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                catch (ArgumentException ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-                }
+                await DriverService.AddDriver(newDriver);
+                return Request.CreateResponse(HttpStatusCode.Created, newDriver);
             }
-
-            // DELETE api/driver/{id}
-            public HttpResponseMessage Delete(int id)
+            catch (ArgumentException ex)
             {
-                try
-                {
-                    DriverService.DeleteDriver(id);
-                    return Request.CreateResponse(HttpStatusCode.OK, "Driver deleted!");
-                }
-                catch (KeyNotFoundException)
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        // PUT api/driver/{id}
+        public async Task<HttpResponseMessage> Put(int id, [FromBody] DriverUpdate editedDriver)
+        {
+            try
+            {
+                await DriverService.UpdateDriver(id, editedDriver);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (ArgumentException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        // DELETE api/driver/{id}
+        public async Task<HttpResponseMessage> Delete(int id)
+        {
+            try
+            {
+                await DriverService.DeleteDriver(id);
+                return Request.CreateResponse(HttpStatusCode.OK, "Driver deleted!");
+            }
+            catch (KeyNotFoundException)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }
-
 }

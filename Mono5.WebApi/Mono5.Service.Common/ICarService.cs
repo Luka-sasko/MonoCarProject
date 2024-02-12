@@ -8,10 +8,10 @@ namespace Mono5.Service.Common
 {
     public interface ICarService
     {
-        Car GetCarById(int id);
-        IEnumerable<Car> GetAllCars();
-        void AddCar(Car car);
-        void UpdateCar(int id, CarUpdate editedCar);
-        void DeleteCar(int id);
+        Task<Car> GetCarById(int id);
+        Task<IEnumerable<Car>> GetAllCars();
+        Task AddCar(Car car);
+        Task UpdateCar(int id, CarUpdate editedCar);
+        Task DeleteCar(int id);
     }
 }

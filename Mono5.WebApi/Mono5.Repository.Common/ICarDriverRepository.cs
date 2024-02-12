@@ -10,11 +10,11 @@ namespace Mono5.Repository.Common
     public interface ICarDriverRepository
     {
 
-        Driver FindDriverById(int id);
-        Car FindCarById(int id);
-        void DeleteCarDriver(int driverId, int carId);
-        int UpdateCarDriver(int carId, int driverId, int newDriverId);
-        void AddCarDriver(int carId, int driverId);
-        IEnumerable<Driver> GetAllCarsDrivers(int carId);
+        Task<Driver> FindDriverById(int id);
+        Task<Car> FindCarById(int id);
+        Task DeleteCarDriver(int driverId, int carId);
+        Task<int> UpdateCarDriver(int carId, int driverId, int newDriverId);
+        Task AddCarDriver(int carId, int driverId);
+        Task<IEnumerable<Driver>> GetAllCarsDrivers(int carId);
     }
 }
