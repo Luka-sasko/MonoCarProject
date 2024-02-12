@@ -18,6 +18,9 @@ namespace Mono5.WebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+
+            AutofacConfig.Configure(GlobalConfiguration.Configuration);
         }
     }
 }

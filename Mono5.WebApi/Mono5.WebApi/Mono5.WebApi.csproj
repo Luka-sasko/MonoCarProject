@@ -157,6 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -355,6 +356,14 @@
     <ProjectReference Include="..\Mono5.Model\Mono5.Model.csproj">
       <Project>{36cc97aa-900a-4de8-ad83-bfcdfb818ed6}</Project>
       <Name>Mono5.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono5.Repository.Common\Mono5.Repository.Common.csproj">
+      <Project>{8dcb7cf0-13fd-410a-884d-1bbe5e4dc5ec}</Project>
+      <Name>Mono5.Repository.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mono5.Repository\Mono5.Repository.csproj">
+      <Project>{37fff7d0-71d8-47d8-896c-75d19766f1f7}</Project>
+      <Name>Mono5.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mono5.Service.Common\Mono5.Service.Common.csproj">
       <Project>{7876f004-b47f-4ed3-9439-1874415cd99f}</Project>

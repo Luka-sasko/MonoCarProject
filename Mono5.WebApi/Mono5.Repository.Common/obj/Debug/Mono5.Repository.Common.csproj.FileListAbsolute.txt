@@ -40,3 +40,16 @@ F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\obj\Debug\Mono5.Repository.Common.
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\obj\Debug\Mono5.Repository.Common.csproj.CopyComplete
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\obj\Debug\Mono5.Repository.Common.dll
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\obj\Debug\Mono5.Repository.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.Extensions.DependencyInjection.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.Integration.WebApi.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Newtonsoft.Json.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Net.Http.Formatting.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Web.Http.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Mono5.Model.dll.config
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.Extensions.DependencyInjection.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.Integration.WebApi.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Newtonsoft.Json.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Net.Http.Formatting.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Web.Http.xml
