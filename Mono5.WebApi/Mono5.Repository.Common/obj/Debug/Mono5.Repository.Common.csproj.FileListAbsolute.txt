@@ -53,3 +53,6 @@ F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Autofac.Integration.WebA
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Newtonsoft.Json.xml
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Net.Http.Formatting.xml
 F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\System.Web.Http.xml
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Mono5.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Mono5.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Repository.Common\bin\Debug\Mono5.Common.dll.config

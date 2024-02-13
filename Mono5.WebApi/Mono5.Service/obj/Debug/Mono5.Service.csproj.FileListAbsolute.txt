@@ -46,3 +46,6 @@ F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\System.Numerics.Vectors.xml
 F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\System.Threading.Tasks.Extensions.xml
 F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\System.Web.Http.xml
+F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\Mono5.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\Mono5.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Service\bin\Debug\Mono5.Common.dll.config

@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mono5.Common;
 namespace Mono5.Repository.Common
 {
     public interface IDriverRepository
     {
-        Task<IEnumerable<Driver>> GetAllDrivers();
+        
+        Task<IEnumerable<Driver>> GetDrivers(Paging paging,Sorting sorting,DriverFiltering driverFiltreing);
         Task<Driver> FindDriverById(int id);
-        Task DeleteDriver(int id);
-        Task UpdateDriver(int id, DriverUpdate updatedDriver);
-        Task AddDriver(Driver driver);
+        Task<Driver> DeleteDriver(int id);
+        Task<Driver> UpdateDriver(int id, DriverUpdate updatedDriver);
+        Task<Driver> AddDriver(Driver driver);
     }
 }

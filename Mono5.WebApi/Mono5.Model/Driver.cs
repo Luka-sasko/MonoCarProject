@@ -9,15 +9,14 @@ namespace Mono5.Model
     public class Driver
     {
         public Driver() { }
-        public Driver(int id, string firstName, string lastName, string contact)
+        public Driver(int id,string firstName, string lastName, string contact)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Contact = contact;
         }
-
-        public int Id { get; set; }
+        public int Id { get; set; } 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Contact { get; set; }

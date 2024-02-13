@@ -4,7 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Mono5.Common;
 using Mono5.Model;
+using Mono5.Service;
 using Mono5.Service.Common;
 
 namespace Mono5.WebApi.Controllers
@@ -18,17 +20,28 @@ namespace Mono5.WebApi.Controllers
             CarService = carService;
         }
 
-        // GET api/car/{id}
-        public async Task<HttpResponseMessage> Get(int id)
+        public async Task<HttpResponseMessage> Get(
+            [FromUri] int pageNumber=1,
+            [FromUri] int pageSize=10,
+            [FromUri] string sortBy="",
+            [FromUri] bool isAsc=true,
+            [FromUri] string searchQuery=null,
+            [FromUri] string model= null,
+            [FromUri] string brand=null,
+            [FromUri] int? manufacturYear=null)
+
         {
             try
             {
-                var car = await CarService.GetCarById(id);
-                if (car == null)
+                Paging paging = new Paging { PageNumber=pageNumber,PageSize = pageSize };
+                Sorting sorting = new Sorting { SortBy=sortBy, IsAsc=isAsc};
+                CarFiltering carFiltering = new CarFiltering { SearchQuery = searchQuery, Brand = brand, Model = model, ManufacturYear = manufacturYear.GetValueOrDefault() };
+                var cars = await CarService.GetCars(paging, sorting, carFiltering);
+                if (cars == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Car was not found!");
                 }
-                return Request.CreateResponse(HttpStatusCode.OK, car);
+                return Request.CreateResponse(HttpStatusCode.OK, cars);
             }
             catch (Exception ex)
             {
@@ -36,13 +49,13 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // POST api/car
         public async Task<HttpResponseMessage> Post([FromBody] Car newCar)
         {
             try
             {
                 await CarService.AddCar(newCar);
-                return Request.CreateResponse(HttpStatusCode.Created, newCar);
+                var car = await CarService.GetCarById(newCar.Id);
+                return Request.CreateResponse(HttpStatusCode.Created, car);
             }
             catch (ArgumentException ex)
             {
@@ -54,13 +67,13 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // PUT api/car/{id}
         public async Task<HttpResponseMessage> Put(int id, [FromBody] CarUpdate editedCar)
         {
             try
             {
                 await CarService.UpdateCar(id, editedCar);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                var car = await CarService.GetCarById(id);
+                return Request.CreateResponse(HttpStatusCode.OK,car);
             }
             catch (ArgumentException ex)
             {
@@ -72,13 +85,14 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // DELETE api/car/{id}
         public async Task<HttpResponseMessage> Delete(int id)
         {
             try
             {
+                var car = await CarService.GetCarById(id);
+
                 await CarService.DeleteCar(id);
-                return Request.CreateResponse(HttpStatusCode.OK, "Car deleted!");
+                return Request.CreateResponse(HttpStatusCode.OK, car);
             }
             catch (KeyNotFoundException)
             {

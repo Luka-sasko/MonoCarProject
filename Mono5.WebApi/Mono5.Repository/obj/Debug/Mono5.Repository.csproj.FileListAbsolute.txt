@@ -56,3 +56,6 @@ F:\Mono5\Mono5.WebApi\Mono5.Repository\obj\Debug\Mono5.Repository.csproj.CoreCom
 F:\Mono5\Mono5.WebApi\Mono5.Repository\obj\Debug\Mono5.Repository.csproj.CopyComplete
 F:\Mono5\Mono5.WebApi\Mono5.Repository\obj\Debug\Mono5.Repository.dll
 F:\Mono5\Mono5.WebApi\Mono5.Repository\obj\Debug\Mono5.Repository.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Repository\bin\Debug\Mono5.Common.dll
+F:\Mono5\Mono5.WebApi\Mono5.Repository\bin\Debug\Mono5.Common.pdb
+F:\Mono5\Mono5.WebApi\Mono5.Repository\bin\Debug\Mono5.Common.dll.config

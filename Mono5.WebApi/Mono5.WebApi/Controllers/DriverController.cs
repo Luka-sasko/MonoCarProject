@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Mono5.Common;
 using Mono5.Model;
 using Mono5.Service.Common;
 
@@ -18,17 +20,27 @@ namespace Mono5.WebApi.Controllers
             DriverService = driverService;
         }
 
-        // GET api/driver/{id}
-        public async Task<HttpResponseMessage> Get(int id)
+        public async Task<HttpResponseMessage> Get(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string sortBy = "",
+            bool isAsc = true,
+            string searchQuery = null,
+            string firstName = null,
+            string lastName = null,
+            string contact=null)
         {
             try
             {
-                var driver = await DriverService.GetDriverById(id);
-                if (driver == null)
+                Paging paging = new Paging { PageNumber = pageNumber, PageSize = pageSize };
+                Sorting sorting = new Sorting { SortBy = sortBy, IsAsc = isAsc };
+                DriverFiltering driverFiltering = new DriverFiltering { SearchQuery = searchQuery, FirstName = firstName, LastName = lastName, Contact = contact };
+                var drivers = await DriverService.GetDrivers(paging,sorting,driverFiltering);
+                if (drivers == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Driver was not found!");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Drivers was not found!");
                 }
-                return Request.CreateResponse(HttpStatusCode.OK, driver);
+                return Request.CreateResponse(HttpStatusCode.OK, drivers);
             }
             catch (Exception ex)
             {
@@ -36,7 +48,6 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // POST api/driver
         public async Task<HttpResponseMessage> Post([FromBody] Driver newDriver)
         {
             try
@@ -54,13 +65,13 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // PUT api/driver/{id}
         public async Task<HttpResponseMessage> Put(int id, [FromBody] DriverUpdate editedDriver)
         {
             try
             {
                 await DriverService.UpdateDriver(id, editedDriver);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                var driver =await DriverService.GetDriverById(id);
+                return Request.CreateResponse(HttpStatusCode.OK,driver);
             }
             catch (ArgumentException ex)
             {
@@ -72,13 +83,13 @@ namespace Mono5.WebApi.Controllers
             }
         }
 
-        // DELETE api/driver/{id}
         public async Task<HttpResponseMessage> Delete(int id)
         {
             try
             {
+                var driver = await DriverService.GetDriverById(id);
                 await DriverService.DeleteDriver(id);
-                return Request.CreateResponse(HttpStatusCode.OK, "Driver deleted!");
+                return Request.CreateResponse(HttpStatusCode.OK,driver);
             }
             catch (KeyNotFoundException)
             {

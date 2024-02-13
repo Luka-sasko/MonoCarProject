@@ -114,6 +114,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mono5.Common\Mono5.Common.csproj">
+      <Project>{cca891ac-f81b-4db7-a4cd-9e254f6d56ef}</Project>
+      <Name>Mono5.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mono5.Model\Mono5.Model.csproj">
       <Project>{36cc97aa-900a-4de8-ad83-bfcdfb818ed6}</Project>
       <Name>Mono5.Model</Name>

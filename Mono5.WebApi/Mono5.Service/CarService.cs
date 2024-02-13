@@ -1,4 +1,5 @@
-﻿using Mono5.Model;
+﻿using Mono5.Common;
+using Mono5.Model;
 using Mono5.Repository.Common;
 using Mono5.Service.Common;
 using System;
@@ -18,24 +19,26 @@ namespace Mono5.Service
             CarRepository = carRepository;
         }
 
-        public async Task AddCar(Car car)
+        public async Task<Car> AddCar(Car car)
         {
             if (car == null)
                 throw new ArgumentException("Car cannot be null");
             await CarRepository.AddCar(car);
+            return await CarRepository.FindCarById(car.Id);
         }
 
-        public async Task DeleteCar(int id)
+        public async Task<Car> DeleteCar(int id)
         {
             var car = await CarRepository.FindCarById(id);
             if (car == null)
                 throw new ArgumentException("Car not found");
             await CarRepository.DeleteCar(id);
+            return car;
         }
 
-        public async Task<IEnumerable<Car>> GetAllCars()
+        public async Task<IEnumerable<Car>> GetCars(Paging paging, Sorting sorting, CarFiltering carFilter)
         {
-            return await CarRepository.GetAllCars();
+            return await CarRepository.GetCars(paging,sorting,carFilter);
         }
 
         public async Task<Car> GetCarById(int id)
@@ -46,12 +49,13 @@ namespace Mono5.Service
             return car;
         }
 
-        public async Task UpdateCar(int id, CarUpdate editedCar)
+        public async Task<Car> UpdateCar(int id, CarUpdate editedCar)
         {
             var car = await CarRepository.FindCarById(id);
             if (car == null)
                 throw new ArgumentException("Car not found");
             await CarRepository.UpdateCar(id, editedCar);
+            return await CarRepository.FindCarById(id);
         }
     }
 }

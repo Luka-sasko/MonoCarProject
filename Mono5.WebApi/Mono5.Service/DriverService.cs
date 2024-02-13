@@ -1,4 +1,5 @@
-﻿using Mono5.Model;
+﻿using Mono5.Common;
+using Mono5.Model;
 using Mono5.Repository.Common;
 using Mono5.Service.Common;
 using System;
@@ -18,24 +19,26 @@ namespace Mono5.Service
             DriverRepository = driverRepository;
         }
 
-        public async Task AddDriver(Driver driver)
+        public async Task<Driver> AddDriver(Driver driver)
         {
             if (driver == null)
                 throw new ArgumentException("Driver cannot be null");
             await DriverRepository.AddDriver(driver);
+            return await DriverRepository.FindDriverById(driver.Id);
         }
 
-        public async Task DeleteDriver(int id)
+        public async Task<Driver> DeleteDriver(int id)
         {
             var driver = await DriverRepository.FindDriverById(id);
             if (driver == null)
                 throw new ArgumentException("Driver not found");
             await DriverRepository.DeleteDriver(id);
+            return driver;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllDrivers()
+        public async Task<IEnumerable<Driver>> GetDrivers(Paging paging, Sorting sorting, DriverFiltering driverFilter)
         {
-            return await DriverRepository.GetAllDrivers();
+            return await DriverRepository.GetDrivers(paging,sorting,driverFilter);
         }
 
         public async Task<Driver> GetDriverById(int id)
@@ -46,12 +49,13 @@ namespace Mono5.Service
             return driver;
         }
 
-        public async Task UpdateDriver(int id, DriverUpdate editedDriver)
+        public async Task<Driver> UpdateDriver(int id, DriverUpdate editedDriver)
         {
             var driver = await DriverRepository.FindDriverById(id);
             if (driver == null)
                 throw new ArgumentException("Driver not found");
             await DriverRepository.UpdateDriver(id, editedDriver);
+            return await DriverRepository.FindDriverById(id);
         }
     }
 }

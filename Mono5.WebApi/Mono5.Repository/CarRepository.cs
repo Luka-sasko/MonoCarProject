@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using Npgsql;
 using Mono5.Model;
 using Mono5.Repository.Common;
+using System.Text;
+using System.Web.Http;
+using Mono5.Common;
+using Microsoft.Extensions.Logging;
 
 namespace Mono5.Repository
 {
@@ -13,30 +17,67 @@ namespace Mono5.Repository
          "Password=postgres;" +
          "Database=postgres";
 
-        public async Task<IEnumerable<Car>> GetAllCars()
+        public async Task<IEnumerable<Car>> GetCars(Paging paging, Sorting sorting, CarFiltering carFilter)
         {
             var cars = new List<Car>();
 
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            if (carFilter != null)
             {
-                await connection.OpenAsync();
-
-                using (var cmd = new NpgsqlCommand("SELECT * FROM \"Car\"", connection))
-                using (var reader = await cmd.ExecuteReaderAsync())
+                using (var connection = new NpgsqlConnection(CONNECTION_STRING))
                 {
-                    while (await reader.ReadAsync())
+                    await connection.OpenAsync();
+
+                    var queryBuilder = new StringBuilder("SELECT * FROM \"Car\" WHERE 1 = 1");
+
+                    using (var cmd = new NpgsqlCommand(queryBuilder.ToString(), connection))
                     {
-                        cars.Add(new Car(
-                            (int)reader["Id"],
-                            (string)reader["Model"],
-                            (string)reader["Brand"],
-                            (int)reader["ManufacturYear"]));
+                        if (!string.IsNullOrEmpty(carFilter.Model))
+                        {
+                            queryBuilder.Append(" AND \"Model\" = @Model");
+                            cmd.Parameters.AddWithValue("@Model", carFilter.Model);
+                        }
+
+                        if (!string.IsNullOrEmpty(carFilter.Brand))
+                        {
+                            queryBuilder.Append(" AND \"Brand\" = @Brand");
+                            cmd.Parameters.AddWithValue("@Brand", carFilter.Brand);
+                        }
+
+                        if (carFilter.ManufacturYear > 0)
+                        {
+                            queryBuilder.Append(" AND \"ManufacturYear\" = @ManufacturYear");
+                            cmd.Parameters.AddWithValue("@ManufacturYear", carFilter.ManufacturYear);
+                        }
+
+                        if (!string.IsNullOrEmpty(sorting.SortBy))
+                        {
+                            queryBuilder.Append($" ORDER BY \"{sorting.SortBy}\" {(sorting.IsAsc ? "ASC" : "DESC")}");
+                        }
+
+                        queryBuilder.Append(" LIMIT @PageSize OFFSET @Offset");
+
+                        cmd.Parameters.AddWithValue("@PageSize", paging.PageSize);
+                        cmd.Parameters.AddWithValue("@Offset", (paging.PageNumber - 1) * paging.PageSize);
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                cars.Add(new Car(
+                                    (int)reader["Id"],
+                                    (string)reader["Model"],
+                                    (string)reader["Brand"],
+                                    (int)reader["ManufacturYear"]));
+                            }
+                        }
                     }
                 }
             }
-
             return cars;
         }
+
+
+
 
         public async Task<Car> FindCarById(int id)
         {
@@ -67,7 +108,7 @@ namespace Mono5.Repository
             return car;
         }
 
-        public async Task UpdateCar(int id, CarUpdate editedCar)
+        public async Task<Car> UpdateCar(int id, CarUpdate editedCar)
         {
             Car car = await FindCarById(id);
 
@@ -85,9 +126,10 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return await FindCarById(id);
         }
 
-        public async Task DeleteCar(int id)
+        public async Task<Car> DeleteCar(int id)
         {
             using (var connection = new NpgsqlConnection(CONNECTION_STRING))
             {
@@ -100,9 +142,10 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return await FindCarById(id);
         }
 
-        public async Task AddCar(Car newCar)
+        public async Task<Car> AddCar(Car newCar)
         {
             using (var connection = new NpgsqlConnection(CONNECTION_STRING))
             {
@@ -118,6 +161,7 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return await FindCarById(newCar.Id);
         }
     }
 }

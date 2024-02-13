@@ -1,7 +1,9 @@
-﻿using Mono5.Model;
+﻿using Mono5.Common;
+using Mono5.Model;
 using Mono5.Repository.Common;
 using Npgsql;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mono5.Repository
@@ -40,32 +42,68 @@ namespace Mono5.Repository
             return null;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllDrivers()
+        public async Task<IEnumerable<Driver>> GetDrivers(Paging paging, Sorting sorting, DriverFiltering driverFilter)
         {
             var drivers = new List<Driver>();
-
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            if (driverFilter != null)
             {
-                await connection.OpenAsync();
-
-                using (var cmd = new NpgsqlCommand("SELECT * FROM \"Driver\"", connection))
-                using (var reader = await cmd.ExecuteReaderAsync())
+                using (var connection = new NpgsqlConnection(CONNECTION_STRING))
                 {
-                    while (await reader.ReadAsync())
+                    await connection.OpenAsync();
+
+                    StringBuilder queryBuilder = new StringBuilder("SELECT * FROM \"Driver\" WHERE 1 = 1");
+
+                    using (var cmd = new NpgsqlCommand(queryBuilder.ToString(), connection))
                     {
-                        drivers.Add(new Driver(
-                            (int)reader["Id"],
-                            (string)reader["FirstName"],
-                            (string)reader["LastName"],
-                            (string)reader["Contact"]));
+                        if (!string.IsNullOrEmpty(driverFilter.FirstName))
+                        {
+                            queryBuilder.Append(" AND \"FirstName\" = @FirstName");
+                            cmd.Parameters.AddWithValue("@FirstName", driverFilter.FirstName);
+                        }
+
+                        if (!string.IsNullOrEmpty(driverFilter.LastName))
+                        {
+                            queryBuilder.Append(" AND \"LastName\" = @LastName");
+                            cmd.Parameters.AddWithValue("@LastName", driverFilter.LastName);
+                        }
+
+                        if (!string.IsNullOrEmpty(driverFilter.Contact))
+                        {
+                            queryBuilder.Append(" AND \"Contact\" = @Contact");
+                            cmd.Parameters.AddWithValue("@Contact", driverFilter.Contact);
+                        }
+
+                        queryBuilder.Append($" ORDER BY \"{sorting.SortBy}\" {(sorting.IsAsc ? "ASC" : "DESC")}");
+                        queryBuilder.Append(" LIMIT @PageSize OFFSET @OffSetValue");
+
+                        if (!string.IsNullOrEmpty(sorting.SortBy))
+                        {
+                            cmd.Parameters.AddWithValue("@SortBy", sorting.SortBy);
+                        }
+
+                        cmd.Parameters.AddWithValue("@PageSize", paging.PageSize);
+                        cmd.Parameters.AddWithValue("@OffSetValue", (paging.PageNumber - 1) * paging.PageSize);
+
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                drivers.Add(new Driver(
+                                   (int)reader["Id"],
+                                   (string)reader["FirstName"],
+                                   (string)reader["LastName"],
+                                   (string)reader["Contact"]));
+                            }
+                        }
                     }
                 }
             }
-
             return drivers;
         }
 
-        public async Task AddDriver(Driver newDriver)
+
+        public async Task<Driver> AddDriver(Driver newDriver)
         {
             using (var connection = new NpgsqlConnection(CONNECTION_STRING))
             {
@@ -81,10 +119,12 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return await FindDriverById(newDriver.Id);
         }
 
-        public async Task DeleteDriver(int id)
+        public async Task<Driver> DeleteDriver(int id)
         {
+            var driver = await FindDriverById(id);
             using (var connection = new NpgsqlConnection(CONNECTION_STRING))
             {
                 await connection.OpenAsync();
@@ -96,9 +136,10 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return driver;
         }
 
-        public async Task UpdateDriver(int id, DriverUpdate updatedDriver)
+        public async Task<Driver> UpdateDriver(int id, DriverUpdate updatedDriver)
         {
             using (var connection = new NpgsqlConnection(CONNECTION_STRING))
             {
@@ -114,6 +155,78 @@ namespace Mono5.Repository
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+            return await FindDriverById(id);
         }
+
+
+
+        /*
+        * public async Task<IEnumerable<Driver>> GetDrivers(DriverFilter driverFilter)
+       {
+           var drivers = new List<Driver>();
+
+           using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+           {
+               await connection.OpenAsync();
+
+               StringBuilder queryBuilder = new StringBuilder("SELECT * FROM \"Driver\"");
+
+               if (driverFilter != null && (!string.IsNullOrEmpty(driverFilter.FirstName) || !string.IsNullOrEmpty(driverFilter.LastName) || !string.IsNullOrEmpty(driverFilter.Contact)))
+               {
+                   queryBuilder.Append(" WHERE 1 = 1");
+
+                   if (!string.IsNullOrEmpty(driverFilter.FirstName))
+                   {
+                       queryBuilder.Append(" AND \"FirstName\" = @FirstName");
+                   }
+
+                   if (!string.IsNullOrEmpty(driverFilter.LastName))
+                   {
+                       queryBuilder.Append(" AND \"LastName\" = @LastName");
+                   }
+
+                   if (!string.IsNullOrEmpty(driverFilter.Contact))
+                   {
+                       queryBuilder.Append(" AND \"Contact\" = @Contact");
+                   }
+               }
+
+               using (var cmd = new NpgsqlCommand(queryBuilder.ToString(), connection))
+               {
+                   if (driverFilter != null && (!string.IsNullOrEmpty(driverFilter.FirstName) || !string.IsNullOrEmpty(driverFilter.LastName) || !string.IsNullOrEmpty(driverFilter.Contact)))
+                   {
+                       if (!string.IsNullOrEmpty(driverFilter.FirstName))
+                       {
+                           cmd.Parameters.AddWithValue("@FirstName", driverFilter.FirstName);
+                       }
+
+                       if (!string.IsNullOrEmpty(driverFilter.LastName))
+                       {
+                           cmd.Parameters.AddWithValue("@LastName", driverFilter.LastName);
+                       }
+
+                       if (!string.IsNullOrEmpty(driverFilter.Contact))
+                       {
+                           cmd.Parameters.AddWithValue("@Contact", driverFilter.Contact);
+                       }
+                   }
+
+                   using (var reader = await cmd.ExecuteReaderAsync())
+                   {
+                       while (await reader.ReadAsync())
+                       {
+                           drivers.Add(new Driver(
+                               (int)reader["Id"],
+                               (string)reader["FirstName"],
+                               (string)reader["LastName"],
+                               (string)reader["Contact"]));
+                       }
+                   }
+               }
+           }
+
+           return drivers;
+       }
+       */
     }
 }
